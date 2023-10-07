@@ -8,8 +8,8 @@ function App() {
 
   const [devices, setDevices] = useState(null);
   const [groups, setGroups] = useState(null);
-  const [tabKey, setTabKey] = useState(null);
-
+  const [lastRefreshRequested, setLastRefreshRequested] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     var devicesList = [];
@@ -53,7 +53,8 @@ function App() {
       })
 
       console.log('data reloaded');
-  }, [tabKey])
+      setLastUpdated(Date.now());
+  }, [lastRefreshRequested])
 
   return (
     <div>
@@ -62,14 +63,16 @@ function App() {
         name='Angela Office'
         devicesList={[]}
         groupsList={[]}
-        handleTabChange={setTabKey}
+        lastUpdated={lastUpdated}
+        handleRefreshApp={setLastRefreshRequested}
       />}
 
       {devices && groups && <Room
         name='Łukasz Office'
         devicesList={devices}
         groupsList={groups}
-        handleTabChange={setTabKey}
+        lastUpdated={lastUpdated}
+        handleRefreshApp={setLastRefreshRequested}
       />}
     </div>
   );

@@ -8,8 +8,12 @@ const Room = (props) => {
     const [key, setKey] = useState('group');
 
     const handleTabChange = (key) => {
-        props.handleTabChange(key);
+        props.handleRefreshApp(Date.now());
         setKey(key);
+    };
+
+    const handleRefreshApp = (timestamp) => {
+        props.handleRefreshApp(timestamp);
     };
 
 
@@ -27,14 +31,14 @@ const Room = (props) => {
                     <Tab eventKey="group" title="Groups">
                         {props.groupsList.map(group => (
                             <Card.Text key={group.id}>
-                                <Group group={group} key={key} />
+                                <Group group={group} key={key} lastUpdated={props.lastUpdated} handleRefreshApp={handleRefreshApp} />
                             </Card.Text>
                         ))}
                     </Tab>
                     <Tab eventKey="device" title="Devices">
                         {props.devicesList.map(device => (
                             <Card.Text key={device.id}>
-                                <Device device={device} key={key} />
+                                <Device device={device} key={key} lastUpdated={props.lastUpdated} handleRefreshApp={handleRefreshApp} />
                             </Card.Text>
                         ))}
                     </Tab>

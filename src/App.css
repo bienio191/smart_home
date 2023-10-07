@@ -14,3 +14,11 @@
 .column_device {
     padding-top: 7px;
 }
+
+.row_group {
+    height: 40px;
+}
+
+.column_group {
+    padding-top: 7px;
+}

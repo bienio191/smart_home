@@ -6,6 +6,7 @@ const Group = (props) => {
     var group = props.group;
 
     const [key, setKey] = useState(props.key);
+    const [lastUpdated, setLastUpdated] = useState(props.lastUpdated);
     const [state, setState] = useState(group.action.on);
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
@@ -14,11 +15,14 @@ const Group = (props) => {
 
     useEffect(() => {
         setState(group.action.on);
-    }, [key]);
+    }, [key, lastUpdated]);
 
     const handleClick = async (id, state) => {
         sendStateAPI(id, state);
-        setState(state);
+    };
+
+    const refreshApp = () => {
+        props.handleRefreshApp(Date.now());
     };
 
     const sendStateAPI = async (id, state) => {
@@ -43,6 +47,7 @@ const Group = (props) => {
 
             setData(result);
             setState(state);
+            refreshApp();
         } catch (err) {
             setErr('Request failed - try again later. (' + err.message + ')');
         } finally {

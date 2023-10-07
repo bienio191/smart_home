@@ -6,6 +6,7 @@ const Device = (props) => {
     var device = props.device;
 
     const [key, setKey] = useState(props.key);
+    const [lastUpdated, setLastUpdated] = useState(props.lastUpdated);
     const [state, setState] = useState(device.state.on);
     const [isReachable, setIsReachable] = useState(device.state.reachable);
     const [isLoading, setIsLoading] = useState(false);
@@ -15,13 +16,15 @@ const Device = (props) => {
 
     useEffect(() => {
         setState(device.state.on);
-    }, [key]);
+    }, [key, lastUpdated]);
 
     const handleClick = async (id, state) => {
         sendStateAPI(id, state);
-        setState(state);
     };
 
+    const refreshApp = () => {
+        props.handleRefreshApp(Date.now());
+    };
 
     const sendStateAPI = async (id, state) => {
         setIsLoading(true);
@@ -45,6 +48,7 @@ const Device = (props) => {
 
             setData(result);
             setState(state);
+            refreshApp();
         } catch (err) {
             setErr('Request failed - try again later. (' + err.message + ')');
         } finally {
