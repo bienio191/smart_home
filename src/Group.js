@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Button, Col, Container, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 
-const Device = (props) => {
+const Group = (props) => {
 
-    var device = props.device;
+    var group = props.group;
 
     const [key, setKey] = useState(props.key);
-    const [state, setState] = useState(device.state.on);
-    const [isReachable, setIsReachable] = useState(device.state.reachable);
+    const [state, setState] = useState(group.action.on);
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
     const [data, setData] = useState({ data: [] });
 
 
     useEffect(() => {
-        setState(device.state.on);
+        setState(group.action.on);
     }, [key]);
 
     const handleClick = async (id, state) => {
@@ -22,10 +21,9 @@ const Device = (props) => {
         setState(state);
     };
 
-
     const sendStateAPI = async (id, state) => {
         setIsLoading(true);
-        let url = 'http://192.168.1.251/api/9xUtlSPAoUhmbEpx7ylwbkc2v6pYDvD9LNjFHS62/lights/' + id + '/state';
+        let url = 'http://192.168.1.251/api/9xUtlSPAoUhmbEpx7ylwbkc2v6pYDvD9LNjFHS62/groups/' + id + '/action';
         try {
             const response = await fetch(url, {
                 method: 'PUT',
@@ -57,43 +55,38 @@ const Device = (props) => {
     return (
 
         <div>
-            <Container className="container_device">
-                <Row className="row_device">
-                    <Col className='col-3 column_device'>{device.name}</Col>
+            <Container className="container_group">
+                <Row className="row_group">
+                    <Col className='col-3 column_group'>{group.name}</Col>
                     {isLoading &&
-                        <Col className='col-9 column_device'>
+                        <Col className='col-9 column_group'>
                             <div>Please wait, sending state to api...</div>
                         </Col>
                     }
-                    {!isReachable &&
-                        <Col className='col-9 column_device error_msg'>
-                            <div>Device is not reachable.</div>
-                        </Col>
-                    }
-                    {!isLoading && isReachable &&
+                    {!isLoading &&
                         <Col className='col-9'>
                             <ButtonGroup>
                                 <ToggleButton
-                                    key={`radio-${device.id}-Off`}
-                                    id={`radio-${device.id}-Off`}
+                                    key={`gr-radio-${group.id}-Off`}
+                                    id={`gr-radio-${group.id}-Off`}
                                     type="radio"
                                     variant='outline-danger'
-                                    name={`radio-${device.id}-Off`}
+                                    name={`gr-radio-${group.id}-Off`}
                                     value='false'
                                     checked={state == false}
-                                    onChange={(e) => handleClick(device.id, false)}
+                                    onChange={(e) => handleClick(group.id, false)}
                                 >
                                     OFF
                                 </ToggleButton>
                                 <ToggleButton
-                                    key={`radio-${device.id}-On`}
-                                    id={`radio-${device.id}-On`}
+                                    key={`gr-radio-${group.id}-On`}
+                                    id={`gr-radio-${group.id}-On`}
                                     type="radio"
                                     variant='outline-success'
-                                    name={`radio-${device.id}-Off`}
+                                    name={`gr-radio-${group.id}-Off`}
                                     value='true'
                                     checked={state == true}
-                                    onChange={(e) => handleClick(device.id, true)}
+                                    onChange={(e) => handleClick(group.id, true)}
                                 >
                                     ON
                                 </ToggleButton>
@@ -111,4 +104,4 @@ const Device = (props) => {
     );
 }
 
-export default Device;
+export default Group;
