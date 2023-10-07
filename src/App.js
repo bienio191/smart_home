@@ -52,7 +52,6 @@ function App() {
         setGroups(groupsList);
       })
 
-      console.log('data reloaded');
       setLastUpdated(Date.now());
   }, [lastRefreshRequested])
 
